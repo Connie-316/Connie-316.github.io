@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>安能物流二级商指南 - 4.2米货车版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background: #F5F5F5;
+            color: #333;
+            line-height: 1.7;
+            padding-bottom: 80px;
+        }
+        
+        /* 顶部警告条 */
+        .alert-bar {
+            background: #FFF1F0;
+            border-bottom: 2px solid #FF4D4F;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #CF1322;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, #1677FF, #4096FF);
+            color: white;
+            padding: 20px 16px 16px 16px;
+        }
+        .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .header p { font-size: 13px; opacity: 0.85; }
+        
+        /* 目录侧边栏 */
+        .toc-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .toc-overlay.active { display: block; }
+        
+        .toc-panel {
+            position: fixed;
+            top: 0; right: 0; bottom: 0;
+            width: 75%;
+            max-width: 320px;
+            background: white;
+            z-index: 1000;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+        }
+        .toc-panel.active { transform: translateX(0); }
+        
+        .toc-header {
+            padding: 16px;
+            background: #1677FF;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .toc-close { font-size: 22px; cursor: pointer; }
+        
+        .toc-list { padding: 8px 0; }
+        .toc-item {
+            display: block;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #F0F0F0;
+            cursor: pointer;
+        }
+        .toc-item:active { background: #E6F7FF; }
+        .toc-item .toc-num {
+            display: inline-block;
+            width: 22px; height: 22px;
+            background: #1677FF;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            text-align: center;
+            line-height: 22px;
+            margin-right: 8px;
+        }
+        
+        /* 目录按钮 */
+        .toc-btn {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            width: 44px; height: 44px;
+            background: #1677FF;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(22,119,255,0.4);
+            z-index: 100;
+            cursor: pointer;
+            border: none;
+        }
+        
+        /* 内容区 */
+        .container { padding: 16px; }
+        
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1677FF;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .card-title .num {
+            display: inline-flex;
+            width: 26px; height: 26px;
+            background: #1677FF;
+            color: white;
+            border-radius: 50%;
+            font-size: 13px;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        
+        /* 警告/提示框 */
+        .warn-box {
+            background: #FFF1F0;
+            border-left: 4px solid #FF4D4F;
+            border-radius: 0 8px 8px 0;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+        .warn-box strong { color: #CF1322; }
+        
+        .info-box {
+            background: #E6F7FF;
+            border-left: 4px solid #1677FF;
+            border-radius: 0 8px 8px 0;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        .ok-box {
+            background: #F6FFED;
+            border-left: 4px solid #52C41A;
+            border-radius: 0 8px 8px 0;
+            padding: 12px;
+            margin: 12px 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        /* 表格 */
+        .tbl {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+        .tbl th {
+            background: #F5F5F5;
+            padding: 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border: 1px solid #E8E8E8;
+            font-size: 12px;
+        }
+        .tbl td {
+            padding: 8px;
+            border: 1px solid #E8E8E8;
+            color: #666;
+            vertical-align: top;
+            font-size: 13px;
+        }
+        .tbl tr:nth-child(even) td { background: #FAFAFA; }
+        
+        /* 预算高亮 */
+        .budget-highlight {
+            background: linear-gradient(135deg, #F6FFED, #D9F7BE);
+            border: 2px solid #52C41A;
+            border-radius: 10px;
+            padding: 14px;
+            margin: 12px 0;
+            text-align: center;
+        }
+        .budget-num {
+            font-size: 28px;
+            font-weight: 800;
+            color: #389E0D;
+        }
+        .budget-label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        /* 步骤条 */
+        .steps { padding-left: 20px; border-left: 3px solid #1677FF; margin: 12px 0; }
+        .step {
+            position: relative;
+            margin-bottom: 16px;
+            padding-left: 12px;
+        }
+        .step:before {
+            content: '';
+            position: absolute;
+            left: -26px; top: 4px;
+            width: 10px; height: 10px;
+            background: #1677FF;
+            border-radius: 50%;
+        }
+        .step-title { font-size: 14px; font-weight: 600; color: #333; }
+        .step-desc { font-size: 13px; color: #666; margin-top: 2px; }
+        
+        /* 检查清单 */
+        .checklist { list-style: none; padding: 0; }
+        .checklist li {
+            padding: 8px 0 8px 28px;
+            font-size: 14px;
+            color: #333;
+            position: relative;
+            border-bottom: 1px solid #F5F5F5;
+        }
+        .checklist li:before {
+            content: '☐';
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+            color: #1677FF;
+        }
+        
+        /* 标签 */
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 6px;
+        }
+        .tag-red { background: #FFF1F0; color: #FF4D4F; }
+        .tag-green { background: #F6FFED; color: #52C41A; }
+        .tag-blue { background: #E6F7FF; color: #1677FF; }
+        .tag-orange { background: #FFF7E6; color: #FA8C16; }
+        
+        /* 底部导航 */
+        .footer {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: white;
+            padding: 10px 16px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            z-index: 50;
+        }
+        
+        /* 折叠区块 */
+        .collapse-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .collapse-header .arrow {
+            font-size: 12px;
+            color: #999;
+            transition: transform 0.3s;
+        }
+        .collapse-header.open .arrow { transform: rotate(180deg); }
+        .collapse-body { display: none; margin-top: 10px; }
+        .collapse-body.open { display: block; }
+        
+        /* 分隔线 */
+        hr { border: none; border-top: 1px solid #F0F0F0; margin: 14px 0; }
+        
+        p { font-size: 14px; color: #666; margin-bottom: 8px; line-height: 1.7; }
+        ul { padding-left: 20px; margin: 8px 0; }
+        li { font-size: 14px; color: #666; margin-bottom: 6px; line-height: 1.6; }
+        
+        /* 高亮强调 */
+        .highlight-red { color: #FF4D4F; font-weight: 700; }
+        .highlight-green { color: #52C41A; font-weight: 700; }
+        .highlight-blue { color: #1677FF; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<!-- 顶部警告 -->
+<div class="alert-bar">⚠️ 70%新手会失败！先看"现实检查"再决定！</div>
+
+<!-- 目录按钮 -->
+<button class="toc-btn" onclick="openToc()">☰</button>
+
+<!-- 目录侧边栏 -->
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<div class="toc-panel" id="tocPanel">
+    <div class="toc-header">
+        <span>📋 快速跳转</span>
+        <span class="toc-close" onclick="closeToc()">✕</span>
+    </div>
+    <div class="toc-list">
+        <a class="toc-item" href="#s1" onclick="closeToc()"><span class="toc-num">1</span>现实检查（必看）</a>
+        <a class="toc-item" href="#s2" onclick="closeToc()"><span class="toc-num">2</span>4.2米货车投资预算</a>
+        <a class="toc-item" href="#s3" onclick="closeToc()"><span class="toc-num">3</span>证照办理</a>
+        <a class="toc-item" href="#s4" onclick="closeToc()"><span class="toc-num">4</span>购车指南（4.2米专项）</a>
+        <a class="toc-item" href="#s5" onclick="closeToc()"><span class="toc-num">5</span>30天上手计划</a>
+        <a class="toc-item" href="#s6" onclick="closeToc()"><span class="toc-num">6</span>找客户方法</a>
+        <a class="toc-item" href="#s7" onclick="closeToc()"><span class="toc-num">7</span>避坑指南</a>
+        <a class="toc-item" href="#s8" onclick="closeToc()"><span class="toc-num">8</span>检查清单</a>
+    </div>
+</div>
+
+<!-- 头部 -->
+<div class="header">
+    <h1>🚛 安能物流二级商加盟指南</h1>
+    <p>4.2米货车版 · 小白专用 · 手机适配 · 2026年5月</p>
+</div>
+
+<div class="container">
+
+    <!-- 第一部分：现实检查 -->
+    <div class="card" id="s1">
+        <div class="card-title"><span class="num">1</span>现实检查（必看！）</div>
+        
+        <div class="warn-box">
+            <strong>⚠️ 70%的新手会在6个月内失败或亏损！</strong><br>
+            请先读完这部分，再决定是否加盟。
+        </div>
+        
+        <p><strong>真实收入预期（临沂罗庄区，4.2米货车）：</strong></p>
+        <table class="tbl">
+            <tr><th>阶段</th><th>每天订单</th><th>月收入（毛利）</th><th>净利润（估算）</th></tr>
+            <tr><td>新手期（1-3个月）</td><td>8-15票</td><td>5000-8000元</td><td>2000-4000元</td></tr>
+            <tr><td>稳定期（3-6个月）</td><td>20-35票</td><td>10000-15000元</td><td>6000-10000元</td></tr>
+            <tr><td>成熟期（6个月+）</td><td>40票+</td><td>15000-25000元</td><td>10000-18000元</td></tr>
+        </table>
+        
+        <div class="info-box">
+            💡 <strong>注意：毛利还要扣除以下支出！</strong><br>
+            - 油费：2000-3500元/月（4.2米车油耗高）<br>
+            - 餐费：600元/月<br>
+            - 车辆维修保养：500-1000元/月<br>
+            - 车险平摊：400-600元/月<br>
+            - 房租（如有）：500-1000元/月
+        </div>
+        
+        <hr>
+        <p><strong>❌ 什么人不适合做这个？</strong></p>
+        <ul>
+            <li>资金全部来自借贷（失败率70%+）</li>
+            <li>期望快速回本致富</li>
+            <li>不愿意每天跑市场找客户</li>
+            <li>不能承受每天工作10+小时</li>
+            <li>不能接受前期收入不稳定</li>
+        </ul>
+        
+        <div class="ok-box">
+            ✅ <strong>建议：先去朋友网点实习1-2周！</strong><br>
+            看看真实工作是不是你能接受的，再决定。
+        </div>
+    </div>
+
+    <!-- 第二部分：4.2米货车投资预算 -->
+    <div class="card" id="s2">
+        <div class="card-title"><span class="num">2</span>4.2米货车投资预算（详细明细）</div>
+        
+        <div class="warn-box">
+            ⚠️ <strong>4.2米货车 vs 微卡/面包车：</strong><br>
+            - 4.2米货车：载货量大，适合订单稳定后升级<br>
+            - 微卡/面包车：成本低，适合新手起步<br>
+            - <span class="highlight-red">如果你还没开始，建议先买微卡（1.5万元），3个月后再换4.2米</span>
+        </div>
+        
+        <div class="budget-highlight">
+            <div class="budget-num">5-7万元</div>
+            <div class="budget-label">4.2米货车启动资金（含首年所有支出）</div>
+        </div>
+        
+        <p><strong>开支明细表（逐项列出）：</strong></p>
+        <table class="tbl">
+            <tr><th>项目</th><th>金额</th><th>说明/注意事项</th></tr>
+            <tr><td>🔴 二手4.2米货车</td><td>35,000元</td><td>3-5年车龄，必须找懂车的人帮忙看</td></tr>
+            <tr><td>🔴 车辆过户费</td><td>500元</td><td>二手车市场办理</td></tr>
+            <tr><td>🔴 交强险（首年）</td><td>1,850元</td><td>必须买，4.2米货车保费高</td></tr>
+            <tr><td>🔴 商业险（首年）</td><td>4,500元</td><td>第三者100万+车损险+座位险</td></tr>
+            <tr><td>🔴 货物保险（首年）</td><td>1,200元</td><td>必须买！货物损坏要赔偿</td></tr>
+            <tr><td>🔴 车船税（首年）</td><td>420元</td><td>按排量征收，必须交</td></tr>
+            <tr style="background: #FFF7E6"><td><strong>小计：车辆+保险</strong></td><td><strong>43,470元</strong></td><td>最大支出项</td></tr>
+            <tr><td>🟡 营业执照办理</td><td>0元</td><td>自己办免费，代办200-500元</td></tr>
+            <tr><td>🟡 道路运输经营许可证</td><td>0-500元</td><td>需向交通局确认是否要办</td></tr>
+            <tr><td>🟡 手机+电脑+打印机</td><td>3,000元</td><td>二手也行，总计3000元够用</td></tr>
+            <tr><td>🟡 扫描枪+PDA</td><td>500元</td><td>闲鱼二手，新的贵</td></tr>
+            <tr><td>🟡 门面租金（3个月）</td><td>1,500元</td><td>临沂罗庄区，500元/月，在家办公可省</td></tr>
+            <tr><td>🟡 门面装修+招牌</td><td>1,000元</td><td>简单装修即可</td></tr>
+            <tr><td>🟡 流动资金（备用）</td><td>10,000元</td><td>油费+餐费+应急，至少准备3个月</td></tr>
+            <tr style="background: #F6FFED"><td><strong>小计：其他支出</strong></td><td><strong>16,500元</strong></td><td>可压缩到1万元以内</td></tr>
+            <tr style="background: #E6F7FF"><td><strong>总计</strong></td><td><strong>59,970元</strong></td><td>约6万元</td></tr>
+        </table>
+        
+        <div class="info-box">
+            💡 <strong>如何压缩到4-5万元？</strong><br>
+            1. 推迟买车，先租4.2米车（1500-2000元/月）<br>
+            2. 在家办公，不租门面（省1500元）<br>
+            3. 手机+电脑用自己现有的（省3000元）<br>
+            4. 买更便宜的二手车（2.5-3万元）
+        </div>
+        
+        <div class="warn-box">
+            ⚠️ <strong>预防支出（很多人忽略！）：</strong><br>
+            1. <strong>车辆维修保养</strong>：500-1000元/月，买车后第一次保养立即做<br>
+            2. <strong>违章罚款</strong>：预留500-1000元/年<br>
+            3. <strong>车辆年检</strong>：200-500元/年（上线检测费）<br>
+            4. <strong>保险续保</strong>：第二年约4000-6000元（不出险会便宜）<br>
+            5. <strong>轮胎更换</strong>：4.2米车6个轮胎，换一次约2000-3000元（用3-4年）
+        </div>
+    </div>
+
+    <!-- 第三部分：证照办理 -->
+    <div class="card" id="s3">
+        <div class="card-title"><span class="num">3</span>证照办理（4.2米货车特别注意）</div>
+        
+        <div class="warn-box">
+            ⚠️ <strong>4.2米货车关键问题：是否需要营运证？</strong><br>
+            看行驶证上的<strong>"总质量"</strong>一栏：<br>
+            - ≤4500kg → 不需要办营运证 ✅<br>
+            - ＞4500kg → <span class="highlight-red">必须办营运证 ⚠️</span><br>
+            <br>
+            <strong>注意：很多4.2米货车总质量＞4.5吨！买车前一定要确认！</strong>
+        </div>
+        
+        <table class="tbl">
+            <tr><th>证照</th><th>是否需要</th><th>费用</th><th>说明</th></tr>
+            <tr><td>从业资格证（驾驶员）</td><td><span class="tag tag-green">不需要</span></td><td>0元</td><td>4.5吨以下车免办</td></tr>
+            <tr><td>车辆营运证</td><td><span class="tag tag-orange">需确认</span></td><td>0元</td><td>看总质量是否≤4.5吨</td></tr>
+            <tr><td>营业执照</td><td><span class="tag tag-red">必须办</span></td><td>免费</td><td>去市场监管局，1-3天</td></tr>
+            <tr><td>车险</td><td><span class="tag tag-red">必须买</span></td><td>7000-8000元/年</td><td>4.2米车保费高</td></tr>
+            <tr><td>道路运输经营许可证</td><td><span class="tag tag-orange">需确认</span></td><td>0-500元</td><td>问一级网点和交通局</td></tr>
+        </table>
+        
+        <div class="info-box">
+            💡 <strong>如何确认你的4.2米车是否需要营运证？</strong><br>
+            1. 看行驶证上的"总质量"一栏<br>
+            2. 打临沂市交通局电话咨询：0539-12328<br>
+            3. 问卖你车的二手车商（他们懂）<br>
+            4. <span class="highlight-red">如果总质量＞4.5吨，必须办营运证，否则罚款1-3万！</span>
+        </div>
+        
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <span>📝 营业执照办理流程（点击展开）</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body">
+            <div class="steps">
+                <div class="step">
+                    <div class="step-title">第一步：核名（1天）</div>
+                    <div class="step-desc">想个名字，去市场监管局核名（或网上核名）</div>
+                </div>
+                <div class="step">
+                    <div class="step-title">第二步：提交材料（1天）</div>
+                    <div class="step-desc">身份证、经营场所证明（租赁合同或房产证）</div>
+                </div>
+                <div class="step">
+                    <div class="step-title">第三步：领取执照（1-3天）</div>
+                    <div class="step-desc">审核通过后，去市场监管局领取</div>
+                </div>
+            </div>
+            <p>💡 建议自己办（免费），不想跑腿可找代办（200-500元）。</p>
+        </div>
+    </div>
+
+    <!-- 第四部分：购车指南（4.2米专项） -->
+    <div class="card" id="s4">
+        <div class="card-title"><span class="num">4</span>购车指南（4.2米货车专项）</div>
+        
+        <div class="warn-box">
+            ⚠️ <strong>买4.2米货车的3个核心注意事项：</strong><br>
+            1. <strong>必须确认总质量≤4.5吨</strong>（否则要办营运证）<br>
+            2. <strong>必须找懂车的人帮忙看</strong>（否则容易被坑）<br>
+            3. <strong>必须确认保险能过户</strong>（否则要重新买保险）
+        </div>
+        
+        <p><strong>推荐车型（总质量≤4.5吨）：</strong></p>
+        <table class="tbl">
+            <tr><th>车型</th><th>价格（二手）</th><th>总质量</th><th>适合人群</th></tr>
+            <tr><td>福田奥铃ctx</td><td>3-4万元</td><td>4.3-4.5吨</td><td>✅ 推荐</td></tr>
+            <tr><td>江淮帅铃</td><td>3-4万元</td><td>4.2-4.5吨</td><td>✅ 推荐</td></tr>
+            <tr><td>东风多利卡</td><td>2.5-3.5万元</td><td>4.0-4.5吨</td><td>✅ 推荐</td></tr>
+            <tr><td>解放J6F</td><td>4-5万元</td><td>4.5吨</td><td>⚠️ 注意超载</td></tr>
+        </table>
+        
+        <hr>
+        <p><strong>买车时必须检查的项目（逐项核对）：</strong></p>
+        <ul>
+            <li>✅ <strong>行驶证</strong>：确认总质量≤4.5吨，确认年检有效期内</li>
+            <li>✅ <strong>发动机</strong>：听声音是否均匀，看是否漏油，看公里数（最好＜30万公里）</li>
+            <li>✅ <strong>变速箱</strong>：试换挡是否顺畅，有无异响</li>
+            <li>✅ <strong>刹车</strong>：试刹车是否灵敏，有无跑偏</li>
+            <li>✅ <strong>车架</strong>：看是否变形、焊接痕迹（事故车不能买）</li>
+            <li>✅ <strong>轮胎</strong>：看磨损程度，4.2米车6个轮胎，换一次约2000-3000元</li>
+            <li>✅ <strong>保险</strong>：确认保险在有效期内，且能过户（不能过户的要重新买）</li>
+            <li>✅ <strong>违章</strong>：查有没有未处理的违章（买车前必须处理完）</li>
+        </ul>
+        
+        <div class="info-box">
+            💡 <strong>买车渠道推荐：</strong><br>
+            1. <strong>二手车市场</strong>：可以现场看车，但要注意是否被调表<br>
+            2. <strong>闲鱼/58同城</strong>：价格便宜，但风险高，必须现场看车<br>
+            3. <strong>朋友介绍</strong>：最靠谱，知根知底<br>
+            <br>
+            <strong>切记：一定要找懂车的人帮忙看！</strong>
+        </div>
+        
+        <hr>
+        <p><strong>车险详细清单（4.2米货车，首年约7500元）：</strong></p>
+        <table class="tbl">
+            <tr><th>保险类型</th><th>是否必须</th><th>费用/年</th><th>说明</th></tr>
+            <tr><td>交强险</td><td><span class="tag tag-red">必须</span></td><td>1,850元</td><td>4.2米货车保费高</td></tr>
+            <tr><td>第三者责任险（100万）</td><td><span class="tag tag-red">强烈建议</span></td><td>2,000元</td><td>撞到人或车，赔偿用</td></tr>
+            <tr><td>车损险</td><td><span class="tag tag-red">强烈建议</span></td><td>2,500元</td><td>自己车撞坏了，保险公司赔</td></tr>
+            <tr><td>座位险（司机+副驾）</td><td><span class="tag tag-orange">建议买</span></td><td>500元</td><td>自己受伤了，保险公司赔</td></tr>
+            <tr><td>货物保险</td><td><span class="tag tag-red">强烈建议</span></td><td>1,200元</td><td>货物损坏/丢失，赔偿客户用</td></tr>
+            <tr><td>车船税</td><td><span class="tag tag-red">必须</span></td><td>420元</td><td>按排量征收</td></tr>
+            <tr style="background: #E6F7FF"><td><strong>合计</strong></td><td>-</td><td><strong>7,470元</strong></td><td>第二年不出险会便宜</td></tr>
+        </table>
+        
+        <div class="warn-box">
+            ⚠️ <strong>预防要点（买车后必须做）：</strong><br>
+            1. <strong>立即做首次保养</strong>：换机油、机滤、空滤，检查刹车油、防冻液（500-800元）<br>
+            2. <strong>检查轮胎</strong>：如果磨损严重，立即更换（否则易爆胎）<br>
+            3. <strong>买灭火器</strong>：货车必须配灭火器，否则罚款（50-100元）<br>
+            4. <strong>买三角警示牌</strong>：必备，否则罚款<br>
+            5. <strong>贴反光条</strong>：货车必须贴，否则罚款（可以自己贴，30元）
+        </div>
+    </div>
+
+    <!-- 第五部分：30天上手计划 -->
+    <div class="card" id="s5">
+        <div class="card-title"><span class="num">5</span>30天快速上手计划</div>
+        
+        <p>前30天是最关键的！严格按照这个时间表执行。</p>
+        
+        <table class="tbl">
+            <tr><th>时间</th><th>做什么</th><th>目标</th></tr>
+            <tr><td><strong>第1-3天</strong></td><td>办证照、买车、买保险、买设备、学系统</td><td>准备好开业</td></tr>
+            <tr><td><strong>第4-7天</strong></td><td>试营业，接测试订单，熟悉路线</td><td>完成第一票订单</td></tr>
+            <tr><td><strong>第8-14天</strong></td><td>每天地推4小时+响应派单+熟悉临沂路线路</td><td>每天5-8票订单</td></tr>
+            <tr><td><strong>第15-21天</strong></td><td>维护前15个客户+优化路线</td><td>有15个稳定客户</td></tr>
+            <tr><td><strong>第22-30天</strong></td><td>分析数据，调整策略，提高效率</td><td>每天10-15票订单</td></tr>
+        </table>
+        
+        <div class="ok-box">
+            🎯 <strong>30天目标：</strong><br>
+            - 完成至少150票订单<br>
+            - 发展至少30个客户（其中15个稳定）<br>
+            - 月收入达到8000-12000元（毛利）<br>
+            - 熟悉临沂罗庄区及周边路线
+        </div>
+    </div>
+
+    <!-- 第六部分：找客户方法 -->
+    <div class="card" id="s6">
+        <div class="card-title"><span class="num">6</span>找客户方法（怎么赚钱？）</div>
+        
+        <div class="info-box">
+            💡 <strong>核心真理：没有客户 = 没有收入！</strong><br>
+            不能坐等系统派单，必须主动找客户！
+        </div>
+        
+        <div class="collapse-header open" onclick="toggleCollapse(this)">
+            <span>方法一：地推扫街（最有效）⭐⭐⭐⭐⭐</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body open">
+            <p><strong>怎么做：</strong>拿着名片，挨家挨户拜访</p>
+            <p><strong>目标客户：</strong>工厂、商铺、电商仓库、批发市场</p>
+            <p><strong>话术：</strong>"老板，我是安能物流的，发全国比快递便宜30%，要不要试试？"</p>
+            <p><strong>时间投入：</strong>每天至少4小时，坚持1个月</p>
+            <p><strong>转化率：</strong>约5-10%（拜访100家，能成5-10家）</p>
+        </div>
+        
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <span>方法二：系统派单（及时响应）⭐⭐⭐⭐</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body">
+            <p><strong>怎么做：</strong>安能系统自动派单（客户下单后分配）</p>
+            <p><strong>关键：</strong>30分钟内联系客户！否则订单可能被转走</p>
+            <p><strong>转化率：</strong>约20-30%（10个派单能成2-3个）</p>
+        </div>
+        
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <span>方法三：老客户转介绍 ⭐⭐⭐</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body">
+            <p><strong>怎么做：</strong>服务好每个客户，让他们帮你介绍</p>
+            <p><strong>激励：</strong>介绍一个新客户，给老客户减免10元运费</p>
+            <p><strong>关键：</strong>服务质量！服务不好，没人帮你介绍</p>
+        </div>
+        
+        <div class="ok-box">
+            🎯 <strong>新手建议（前1个月）：</strong><br>
+            每天：4小时地推 + 及时响应系统派单 + 维护好前30个客户
+        </div>
+    </div>
+
+    <!-- 第七部分：避坑指南 -->
+    <div class="card" id="s7">
+        <div class="card-title"><span class="num">7</span>避坑指南（新手常犯错误）</div>
+        
+        <div class="warn-box">
+            <strong>新手最容易犯的5个错误：</strong>
+        </div>
+        
+            <ul>
+                <li>❌ <strong>高估收入，低估支出</strong><br>
+                → 实际收入可能只有预期的50%，支出却比预期高30%<br>
+                → <span style="color:#389E0D">对策：准备至少3个月的储备金</span></li>
+                <li>❌ <strong>不记账，不知道赚了多少钱</strong><br>
+                → 每天记账！用Excel或记账APP<br>
+                → <span style="color:#389E0D">对策：每天花10分钟记账</span></li>
+                <li>❌ <strong>服务不好，客户流失</strong><br>
+                → 响应要快（30分钟内），态度要好<br>
+                → <span style="color:#389E0D">对策：把"快速响应"当成铁律</span></li>
+                <li>❌ <strong>车辆保养不及时，半路抛锚</strong><br>
+                → 每周检查车辆，定期保养<br>
+                → <span style="color:#389E0D">对策：制定车辆保养计划</span></li>
+                <li>❌ <strong>借贷创业，压力过大</strong><br>
+                → 尽量用自有资金<br>
+                → <span style="color:#389E0D">对策：只用自有资金，失败了也能承受</span></li>
+            </ul>
+        
+        <hr>
+        <p><strong>法律合规风险（4.2米货车特别注意）：</strong></p>
+        <table class="tbl">
+            <tr><th>风险点</th><th>后果</th><th>如何避免</th></tr>
+            <tr><td>无营运证拉货（总质量＞4.5吨车）</td><td>罚款1-3万元+扣车</td><td>确认总质量≤4.5吨，或办营运证</td></tr>
+            <tr><td>超载（4.2米车常见）</td><td>罚款200-2000元+扣分</td><td>严格按行驶证载重量装货</td></tr>
+            <tr><td>货物丢失/损坏</td><td>赔偿客户损失</td><td>买货物保险</td></tr>
+            <tr><td>税务问题（收入超10万/月）</td><td>罚款+补缴税款</td><td>按时报税</td></tr>
+        </table>
+    </div>
+
+    <!-- 第八部分：检查清单 -->
+    <div class="card" id="s8">
+        <div class="card-title"><span class="num">8</span>检查清单（别漏了！）</div>
+        
+        <div class="collapse-header open" onclick="toggleCollapse(this)">
+            <span>✅ 开业前检查清单</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body open">
+            <ul class="checklist">
+                <li>办个体工商户营业执照</li>
+                <li>向交通局确认是否需要办道路运输经营许可证</li>
+                <li>确认4.2米货车总质量≤4.5吨（或办营运证）</li>
+                <li>买二手车（找懂车的人帮忙）</li>
+                <li>买车险（交强险+商业险+货物保险，首年约7500元）</li>
+                <li>确认车险在有效期内，且能过户</li>
+                <li>查违章记录，买车前处理完</li>
+                <li>买手机/电脑/扫描枪</li>
+                <li>选位置（租门面或在家办公）</li>
+                <li>学习安能系统操作</li>
+                <li>准备至少3个月的生活费+运营资金（至少2万元）</li>
+                <li>买灭火器+三角警示牌+贴反光条</li>
+                <li>做首次保养（换机油、机滤、空滤）</li>
+            </ul>
+        </div>
+        
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <span>✅ 每天工作检查清单</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body">
+            <ul class="checklist">
+                <li>检查车辆（油量、轮胎、刹车等）</li>
+                <li>查看安能系统，及时响应派单（30分钟内）</li>
+                <li>地推4小时（前1个月必须！）</li>
+                <li>回访3-5个老客户（维护关系）</li>
+                <li>记账（记录当天收入和支出）</li>
+            </ul>
+        </div>
+        
+        <hr>
+        <div class="ok-box">
+            <strong>🎯 最终建议：</strong><br>
+            1. 先去朋友网点实习1-2周<br>
+            2. 能接受再开始，不能接受及时止损<br>
+            3. 前期能省则省，赚钱了再升级设备<br>
+            4. 记账！记账！记账！<br>
+            5. 坚持3个月，评估是否继续<br>
+            6. <span class="highlight-red">买4.2米车前，一定要确认总质量≤4.5吨！</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- 底部 -->
+<div class="footer">
+    📘 安能物流二级商加盟指南 · 4.2米货车版<br>
+    生成日期：2026年5月20日
+</div>
+
+<script>
+    function openToc() {
+        document.getElementById('tocOverlay').classList.add('active');
+        document.getElementById('tocPanel').classList.add('active');
+    }
+    function closeToc() {
+        document.getElementById('tocOverlay').classList.remove('active');
+        document.getElementById('tocPanel').classList.remove('active');
+    }
+    function toggleCollapse(el) {
+        el.classList.toggle('open');
+        var body = el.nextElementSibling;
+        body.classList.toggle('open');
+    }
+</script>
+</body>
+</html>

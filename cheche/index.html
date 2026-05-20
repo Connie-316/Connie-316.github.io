@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>临沂4.2米货车购车实战指南</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+            background: #F5F5F5; color: #333; line-height: 1.7;
+            padding-bottom: 80px;
+        }
+        .alert-bar {
+            background: #FFF1F0; border-bottom: 2px solid #FF4D4F;
+            padding: 12px 16px; font-size: 14px; color: #CF1322;
+            font-weight: 600; text-align: center;
+        }
+        .header {
+            background: linear-gradient(135deg, #1677FF, #4096FF);
+            color: white; padding: 20px 16px 16px 16px;
+        }
+        .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .header p { font-size: 13px; opacity: 0.85; }
+        .toc-btn {
+            position: fixed; top: 12px; right: 12px;
+            width: 44px; height: 44px; background: #1677FF; color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; box-shadow: 0 4px 12px rgba(22,119,255,0.4);
+            z-index: 100; cursor: pointer; border: none;
+        }
+        .toc-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.5); z-index: 999; }
+        .toc-overlay.active { display: block; }
+        .toc-panel {
+            position: fixed; top: 0; right: 0; bottom: 0; width: 75%; max-width: 320px;
+            background: white; z-index: 1000; overflow-y: auto;
+            transform: translateX(100%); transition: transform 0.3s ease;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+        }
+        .toc-panel.active { transform: translateX(0); }
+        .toc-header { padding: 16px; background: #1677FF; color: white;
+            font-size: 16px; font-weight: 600; display: flex;
+            justify-content: space-between; align-items: center; }
+        .toc-close { font-size: 22px; cursor: pointer; }
+        .toc-list { padding: 8px 0; }
+        .toc-item { display: block; padding: 12px 16px; font-size: 14px; color: #333;
+            text-decoration: none; border-bottom: 1px solid #F0F0F0; cursor: pointer; }
+        .toc-item:active { background: #E6F7FF; }
+        .toc-item .toc-num { display: inline-block; width: 22px; height: 22px;
+            background: #1677FF; color: white; border-radius: 50%; font-size: 12px;
+            text-align: center; line-height: 22px; margin-right: 8px; }
+        .container { padding: 16px; }
+        .card {
+            background: white; border-radius: 12px; padding: 16px;
+            margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .card-title { font-size: 17px; font-weight: 700; color: #1677FF;
+            margin-bottom: 12px; display: flex; align-items: center; }
+        .card-title .num { display: inline-flex; width: 26px; height: 26px;
+            background: #1677FF; color: white; border-radius: 50%; font-size: 13px;
+            align-items: center; justify-content: center; margin-right: 8px; flex-shrink: 0; }
+        .warn-box { background: #FFF1F0; border-left: 4px solid #FF4D4F;
+            border-radius: 0 8px 8px 0; padding: 12px; margin: 12px 0;
+            font-size: 14px; color: #666; line-height: 1.7; }
+        .warn-box strong { color: #CF1322; }
+        .info-box { background: #E6F7FF; border-left: 4px solid #1677FF;
+            border-radius: 0 8px 8px 0; padding: 12px; margin: 12px 0;
+            font-size: 14px; color: #666; line-height: 1.7; }
+        .ok-box { background: #F6FFED; border-left: 4px solid #52C41A;
+            border-radius: 0 8px 8px 0; padding: 12px; margin: 12px 0;
+            font-size: 14px; color: #666; line-height: 1.7; }
+        .tip-box { background: #FFFBE6; border-left: 4px solid #FAAD14;
+            border-radius: 0 8px 8px 0; padding: 12px; margin: 12px 0;
+            font-size: 14px; color: #666; line-height: 1.7; }
+        .tbl { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+        .tbl th { background: #F5F5F5; padding: 8px; text-align: left; font-weight: 600;
+            color: #333; border: 1px solid #E8E8E8; font-size: 12px; }
+        .tbl td { padding: 8px; border: 1px solid #E8E8E8; color: #666;
+            vertical-align: top; font-size: 13px; }
+        .tbl tr:nth-child(even) td { background: #FAFAFA; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px;
+            font-size: 12px; font-weight: 600; margin-right: 6px; }
+        .tag-red { background: #FFF1F0; color: #FF4D4F; }
+        .tag-green { background: #F6FFED; color: #52C41A; }
+        .tag-blue { background: #E6F7FF; color: #1677FF; }
+        .tag-orange { background: #FFF7E6; color: #FA8C16; }
+        .collapse-header { display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; user-select: none; }
+        .collapse-header .arrow { font-size: 12px; color: #999; transition: transform 0.3s; }
+        .collapse-header.open .arrow { transform: rotate(180deg); }
+        .collapse-body { display: none; margin-top: 10px; }
+        .collapse-body.open { display: block; }
+        hr { border: none; border-top: 1px solid #F0F0F0; margin: 14px 0; }
+        p { font-size: 14px; color: #666; margin-bottom: 8px; line-height: 1.7; }
+        ul { padding-left: 20px; margin: 8px 0; }
+        li { font-size: 14px; color: #666; margin-bottom: 6px; line-height: 1.6; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: white;
+            padding: 10px 16px; box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+            text-align: center; font-size: 12px; color: #999; z-index: 50; }
+        .highlight-red { color: #FF4D4F; font-weight: 700; }
+        .highlight-green { color: #52C41A; font-weight: 700; }
+        .step-box { background: #FAFAFA; border-left: 4px solid #1677FF;
+            padding: 12px; margin: 8px 0; border-radius: 0 8px 8px 0; }
+        .step-title { font-size: 14px; font-weight: 600; color: #1677FF; margin-bottom: 4px; }
+        .step-desc { font-size: 13px; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="alert-bar">⚠️ 买车被坑 = 白干3个月！务必看完再出手！</div>
+<button class="toc-btn" onclick="openToc()">☰</button>
+
+<div class="toc-overlay" id="tocOverlay" onclick="closeToc()"></div>
+<div class="toc-panel" id="tocPanel">
+    <div class="toc-header"><span>📋 快速跳转</span><span class="toc-close" onclick="closeToc()">✕</span></div>
+    <div class="toc-list">
+        <a class="toc-item" href="#s1" onclick="closeToc()"><span class="toc-num">1</span>临沂二手车市场套路</a>
+        <a class="toc-item" href="#s2" onclick="closeToc()"><span class="toc-num">2</span>砍价技巧（3万预算）</a>
+        <a class="toc-item" href="#s3" onclick="closeToc()"><span class="toc-num">3</span>如何买到合适的车</a>
+        <a class="toc-item" href="#s4" onclick="closeToc()"><span class="toc-num">4</span>租门店最大化压缩成本</a>
+        <a class="toc-item" href="#s5" onclick="closeToc()"><span class="toc-num">5</span>实战检查清单</a>
+    </div>
+</div>
+
+<div class="header">
+    <h1>🚛 临沂4.2米货车购车实战指南</h1>
+    <p>防坑·砍价·选车·租门店 · 2026年5月</p>
+</div>
+
+<div class="container">
+
+    <!-- 第一部分：临沂二手车市场套路 -->
+    <div class="card" id="s1">
+        <div class="card-title"><span class="num">1</span>临沂二手车市场常见套路</div>
+        
+        <div class="warn-box">
+            <strong>⚠️ 二手车商的核心目的：把不好的车高价卖给你！</strong><br>
+            以下套路，至少中1-2个，务必警惕！
+        </div>
+        
+        <p><strong>套路一：调表车（最常见！）</strong></p>
+        <div class="step-box">
+            <div class="step-title">手法</div>
+            <div class="step-desc">把30万公里的车，调到10万公里，卖高价</div>
+        </div>
+        <p><strong>如何识别：</strong></p>
+        <ul>
+            <li>看方向盘/油门踏板磨损程度（10万公里内很新）</li>
+            <li>看座椅侧面磨损（严重磨损=跑得多）</li>
+            <li>支付宝搜"车况查询"，花30元查保养记录</li>
+            <li>看轮胎生产日期（如果轮胎很新，但里程数很低，可能被调表）</li>
+        </ul>
+        
+        <hr>
+        <p><strong>套路二：事故车翻新</strong></p>
+        <div class="step-box">
+            <div class="step-title">手法</div>
+            <div class="step-desc">大事故车（撞过、侧翻过）修复后当好车卖</div>
+        </div>
+        <p><strong>如何识别：</strong></p>
+        <ul>
+            <li>看大梁是否变形/有焊接痕迹（趴下看车底）</li>
+            <li>看车门缝隙是否均匀（不均匀=撞过）</li>
+            <li>看ABC柱是否有焊接痕迹（拆开门框胶条看）</li>
+            <li>看发动机舱螺丝是否有拧动痕迹（拧动过=修过）</li>
+        </ul>
+        
+        <hr>
+        <p><strong>套路三：泡水车/火烧车</strong></p>
+        <div class="step-box">
+            <div class="step-title">手法</div>
+            <div class="step-desc">泡水车/火烧车修复后当正常车卖（价格很便宜，诱你上当）</div>
+        </div>
+        <p><strong>如何识别：</strong></p>
+        <ul>
+            <li>闻车内是否有霉味（泡水车特有）</li>
+            <li>看座椅底部/螺丝是否有生锈（泡水车会生锈）</li>
+            <li>看发动机舱是否有烧焦痕迹（火烧车）</li>
+            <li>看线束是否有泥沙残留（泡水车）</li>
+        </ul>
+        
+        <hr>
+        <p><strong>套路四：贷款车/抵押车</strong></p>
+        <div class="step-box">
+            <div class="step-title">手法</div>
+            <div class="step-desc">车还有贷款没还清，或者被人抵押了，卖给你后车被拖走</div>
+        </div>
+        <p><strong>如何识别：</strong></p>
+        <ul>
+            <li>查违章：交管12123 APP查违章，能看到车主信息</li>
+            <li>查绿本（大绿本）：必须看到原件，确认在卖家手里</li>
+            <li>去车管所查档：确认车辆状态正常（无抵押/无查封）</li>
+        </ul>
+        
+        <hr>
+        <p><strong>套路五：保险快到期/不能过户</strong></p>
+        <div class="step-box">
+            <div class="step-title">手法</div>
+            <div class="step-desc">保险快到期，或者保险不能过户，你买完要重新买保险（多花7-8千元）</div>
+        </div>
+        <p><strong>如何识别：</strong></p>
+        <ul>
+            <li>看交强险标志（贴在前挡风玻璃上）</li>
+            <li>打保险公司电话，报车牌号，查保险有效期</li>
+            <li>问保险是否能过户（商业险可以过户，交强险不能过户但可以退保重买）</li>
+        </ul>
+        
+        <div class="ok-box">
+            ✅ <strong>防坑终极招数：</strong><br>
+            1. <span class="highlight-red">必须找懂车的人帮忙看！</span>（给200元辛苦费）<br>
+            2. 支付宝搜"车况查询"，花30元查维修记录/事故记录<br>
+            3. 去4S店查保养记录（如果一直在4S店保养）<br>
+            4. 签合同注明"无事故/无泡水/无调表"，否则退款
+        </div>
+    </div>
+
+    <!-- 第二部分：砍价技巧 -->
+    <div class="card" id="s2">
+        <div class="card-title"><span class="num">2</span>砍价技巧（3万预算实战）</div>
+        
+        <div class="info-box">
+            💡 <strong>核心原则：永远不显示你很喜欢这辆车！</strong><br>
+            表现出"可买可不买"，卖家才会降价。
+        </div>
+        
+        <p><strong>✅ 砍价步骤（至少砍2000-5000元）：</strong></p>
+        
+        <div class="step-box">
+            <div class="step-title">第一步：先挑毛病（砍2000元）</div>
+            <div class="step-desc">
+                "老板，这车漆面不平整（指着补漆的地方），轮胎也磨损了，内饰也旧，能不能便宜点？"<br>
+                → 卖家会降价1000-2000元
+            </div>
+        </div>
+        
+        <div class="step-box">
+            <div class="step-title">第二步：对比其他车（再砍1000元）</div>
+            <div class="step-desc">
+                "老板，我刚看了另一辆一样的车，才2.5万，你这3万能少点吗？"<br>
+                → 卖家会再降价500-1000元（即使另一辆车不存在）
+            </div>
+        </div>
+        
+        <div class="step-box">
+            <div class="step-title">第三步：表现出犹豫（再砍500-1000元）</div>
+            <div class="step-desc">
+                "我再看看吧，不行再回来找你。"<br>
+                → 你转身要走，卖家会叫住你："等等，再便宜点给你！"<br>
+                → 这是<span class="highlight-red">最关键的一步</span>！很多人败在这里，太急于成交。
+            </div>
+        </div>
+        
+        <div class="step-box">
+            <div class="step-title">第四步：一次性付款（再砍500-1000元）</div>
+            <div class="step-desc">
+                "老板，我全款现金，能不能再便宜500？"<br>
+                → 卖家喜欢一次性付款（不用等贷款），会再降价
+            </div>
+        </div>
+        
+        <hr>
+        <p><strong>✅ 砍价话术模板：</strong></p>
+        <div class="tip-box">
+            💬 <strong>话术一（挑毛病）：</strong><br>
+            "老板，这车年头有点长了，漆面也不平整，轮胎也该换了，内饰也旧，能不能便宜点？我诚心买！"
+        </div>
+        
+        <div class="tip-box">
+            💬 <strong>话术二（对比其他车）：</strong><br>
+            "老板，XX市场有辆一样的车，才2.6万，你这3万能少点吗？少了我就买你的。"
+        </div>
+        
+        <div class="tip-box">
+            💬 <strong>话术三（表现出犹豫）：</strong><br>
+            "我再看看吧，不行再回来找你。"（然后<span class="highlight-red">真的转身走</span>，不要回头看！）
+        </div>
+        
+        <div class="tip-box">
+            💬 <strong>话术四（一次性付款）：</strong><br>
+            "老板，我全款现金，能不能再便宜500？成我就今天开走！"
+        </div>
+        
+        <hr>
+        <p><strong>✅ 砍价注意事项：</strong></p>
+        <ul>
+            <li>❌ 不要一上来就表现出很喜欢这辆车</li>
+            <li>❌ 不要急于成交（卖家会咬死价格）</li>
+            <li>✅ 让懂车的朋友帮你砍（卖家不敢忽悠）</li>
+            <li>✅ 多跑几家二手车市场，对比价格（临沂远通/旧机动车市场都去看看）</li>
+            <li>✅ 月底买车更便宜（卖家要冲业绩，愿意降价）</li>
+        </ul>
+        
+        <div class="ok-box">
+            ✅ <strong>砍价实战案例：</strong><br>
+            卖家要价3万 → 你挑毛病砍到2.8万 → 对比其他车砍到2.7万 → 表现犹豫砍到2.65万 → 一次性付款砍到2.6万成交！<br>
+            <span class="highlight-green">最终砍价4000元！</span>
+        </div>
+    </div>
+
+    <!-- 第三部分：如何买到合适的车 -->
+    <div class="card" id="s3">
+        <div class="card-title"><span class="num">3</span>如何买到合适的4.2米货车</div>
+        
+        <div class="warn-box">
+            ⚠️ <strong>买车3个核心原则：</strong><br>
+            1. 总质量≤4.5吨（否则要办营运证）<br>
+            2. 必须找懂车的人帮忙看<br>
+            3. 不急于成交，多对比几家
+        </div>
+        
+        <p><strong>✅ 第一步：确定预算和需求</strong></p>
+        <table class="tbl">
+            <tr><th>预算</th><th>推荐车型</th><th>车龄</th><th>里程数</th></tr>
+            <tr><td>1.5-2万元</td><td>福田奥铃/江淮帅铃</td><td>6-8年</td><td>20-30万公里</td></tr>
+            <tr><td>2-2.5万元</td><td>东风多利卡/解放J6F</td><td>4-6年</td><td>15-25万公里</td></tr>
+            <tr><td>2.5-3万元</td><td>福田奥铃ctx/江淮帅铃</td><td>3-5年</td><td>10-20万公里</td></tr>
+        </table>
+        
+        <hr>
+        <p><strong>✅ 第二步：去哪里买？（临沂二手车市场推荐）</strong></p>
+        <ul>
+            <li><strong>临沂远通二手车市场</strong>（蒙山大道与金雀山路交汇处）：规模最大，车源多，但价格偏高</li>
+            <li><strong>临沂市旧机动车交易市场</strong>（沂河路）：价格相对便宜，但车源少</li>
+            <li><strong>闲鱼/58同城</strong>：个人车源，价格最低，但风险最高（建议带懂车的人一起看）</li>
+        </ul>
+        
+        <div class="info-box">
+            💡 <strong>推荐顺序：</strong><br>
+            1. 先去远通二手车市场看车（车源多，可选空间大）<br>
+            2. 再去旧机动车交易市场对比价格<br>
+            3. 最后在闲鱼/58同城找个人车源（如果前面没合适的）
+        </div>
+        
+        <hr>
+        <p><strong>✅ 第三步：现场检查（逐项核对）</strong></p>
+        <table class="tbl">
+            <tr><th>检查项目</th><th>怎么检查</th><th>不合格后果</th></tr>
+            <tr><td>行驶证</td><td>确认总质量≤4.5吨</td><td>＞4.5吨要办营运证</td></tr>
+            <tr><td>发动机</td><td>听声音是否均匀，看是否漏油</td><td>发动机大修要花1-2万元</td></tr>
+            <tr><td>变速箱</td><td>试换挡是否顺畅</td><td>变速箱大修要花5000-8000元</td></tr>
+            <tr><td>刹车</td><td>试刹车是否灵敏</td><td>刹车失灵=安全隐患</td></tr>
+            <tr><td>车架</td><td>看是否变形/焊接痕迹</td><td>大事故车，不能买</td></tr>
+            <tr><td>轮胎</td><td>看磨损程度</td><td>换6个轮胎要2000-3000元</td></tr>
+            <tr><td>保险</td><td>确认在有效期内，且能过户</td><td>不能过户要重新买保险</td></tr>
+            <tr><td>违章</td><td>查是否有未处理的违章</td><td>买车前必须处理完</td></tr>
+        </table>
+        
+        <hr>
+        <p><strong>✅ 第四步：试驾（必须试驾！）</strong></p>
+        <ul>
+            <li><strong>听发动机声音</strong>：均匀的"突突突"声是正常的，如果有异响=发动机有问题</li>
+            <li><strong>试换挡</strong>：换挡是否顺畅，有没有"打齿"的声音</li>
+            <li><strong>试刹车</strong>：刹车是否灵敏，有没有跑偏</li>
+            <li><strong>试转向</strong>：方向盘是否跑偏，转向是否轻松</li>
+            <li><strong>试倒车</strong>：倒车影像/雷达是否正常</li>
+        </ul>
+        
+        <hr>
+        <p><strong>✅ 第五步：过户（买车后必须立即过户！）</strong></p>
+        <div class="step-box">
+            <div class="step-title">过户流程</div>
+            <div class="step-desc">
+                1. 去二手车市场开具交易发票<br>
+                2. 去车管所验车（查车架号/发动机号）<br>
+                3. 交过户费（300-500元）<br>
+                4. 新行驶证/新车牌（或保留原车牌）<br>
+                5. 保险过户（商业险可以过户，交强险不能过户但可以退保重买）
+            </div>
+        </div>
+        
+        <div class="warn-box">
+            ⚠️ <strong>过户注意事项：</strong><br>
+            1. 确认卖家身份证原件在手里<br>
+            2. 确认绿本（大绿本）原件在卖家手里<br>
+            3. 确认车辆无抵押/无查封<br>
+            4. 确认违章已处理完<br>
+            5. <span class="highlight-red">过户完成前，不要付全款！</span>（付定金即可，过户完成再付尾款）
+        </div>
+    </div>
+
+    <!-- 第四部分：租门店最大化压缩成本 -->
+    <div class="card" id="s4">
+        <div class="card-title"><span class="num">4</span>租门店最大化压缩成本</div>
+        
+        <div class="info-box">
+            💡 <strong>核心原则：前期在家办公，有稳定订单了再租门面！</strong><br>
+            租门面=固定成本，前期订单少，租门面是浪费。
+        </div>
+        
+        <p><strong>✅ 如果必须租门面（如何压缩成本？）</strong></p>
+        
+        <div class="step-box">
+            <div class="step-title">方法一：选址不要太靠近主干道</div>
+            <div class="step-desc">
+                - 主干道门面：1500-2000元/月<br>
+                - 次干道/小巷门面：500-800元/月<br>
+                → <span class="highlight-green">省1000-1200元/月！</span>
+            </div>
+        </div>
+        
+        <div class="step-box">
+            <div class="step-title">方法二：合租门面（推荐！）</div>
+            <div class="step-desc">
+                - 找一个已经做物流的网点合租（分一半面积给他）<br>
+                - 租金平摊：500元/月 → 250元/月<br>
+                → <span class="highlight-green">省250元/月！</span><br>
+                - 额外好处：可以跟他学习怎么做，少走弯路
+            </div>
+        </div>
+        
+        <div class="step-box">
+            <div class="step-title">方法三：租"一楼住房"改门店</div>
+            <div class="step-desc">
+                - 临沂很多小区一楼是住房，但可以改门店（做仓储/办公）<br>
+                - 租金：500-800元/月<br>
+                → <span class="highlight-green">比商铺便宜一半！</span>
+            </div>
+        </div>
+        
+        <div class="step-box">
+            <div class="step-title">方法四：不租门面，租"车库/仓库"</div>
+            <div class="step-desc">
+                - 只需要放货+办公的地方，不需要临街门面<br>
+                - 租小区车库/仓库：300-500元/月<br>
+                → <span class="highlight-green">省500-1500元/月！</span>
+            </div>
+        </div>
+        
+        <hr>
+        <p><strong>✅ 租门店砍价技巧：</strong></p>
+        <ul>
+            <li><strong>长租优惠</strong>："我租1年，能不能便宜点？"（一般能便宜50-100元/月）</li>
+            <li><strong>付半年优惠</strong>："我付半年租金，能不能便宜点？"（一般能便宜30-50元/月）</li>
+            <li><strong>对比其他门面</strong>："那边有间更便宜的，你这能不能少点？"</li>
+            <li><strong>淡季租房更便宜</strong>：年底/春节后租房最便宜（房东怕空置）</li>
+        </ul>
+        
+        <hr>
+        <p><strong>✅ 租门店注意事项：</strong></p>
+        <table class="tbl">
+            <tr><th>注意事项</th><th>说明</th></tr>
+            <tr><td>停车方便</td><td>4.2米车需要至少6米长车位，确认能停进去</td></tr>
+            <tr><td>货车能进</td><td>确认路段是否限高/限行（临沂有些路段限高2.5米）</td></tr>
+            <tr><td>有WIFI</td><td>安能系统需要联网</td></tr>
+            <tr><td>能改仓储</td><td>如果租住房改门店，确认能不能办营业执照</td></tr>
+            <tr><td>合同期限</td><td>签半年合同，不要签1年（前期不确定能不能做下去）</td></tr>
+        </table>
+        
+        <div class="ok-box">
+            ✅ <strong>推荐方案（成本最低）：</strong><br>
+            1. 前期在家办公（0租金）<br>
+            2. 有稳定订单了，租小区车库/仓库（300-500元/月）<br>
+            3. 订单更多了，合租门面（250-400元/月）<br>
+            → <span class="highlight-green">最大化压缩成本！</span>
+        </div>
+    </div>
+
+    <!-- 第五部分：实战检查清单 -->
+    <div class="card" id="s5">
+        <div class="card-title"><span class="num">5</span>实战检查清单（别漏了！）</div>
+        
+        <div class="collapse-header open" onclick="toggleCollapse(this)">
+            <span>✅ 买车前检查清单</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body open">
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    确认总质量≤4.5吨（看行驶证）
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    找懂车的人帮忙看（给200元辛苦费）
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    支付宝搜"车况查询"，花30元查维修记录/事故记录
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    试驾（听发动机+试换挡+试刹车+试转向）
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    确认保险在有效期内，且能过户
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    查违章记录，买车前处理完
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    确认绿本（大绿本）原件在卖家手里
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    砍价至少2000-5000元（用本文档的砍价技巧）
+                </li>
+            </ul>
+        </div>
+        
+        <div class="collapse-header" onclick="toggleCollapse(this)">
+            <span>✅ 租门店前检查清单</span>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="collapse-body">
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    确认停车方便（4.2米车需要至少6米长车位）
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    确认货车能进（路段是否限高/限行）
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative; border-bottom: 1px solid #F5F5F5;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    确认有WIFI（安能系统需要联网）
+                </li>
+                <li style="padding: 8px 0 8px 28px; position: relative;">
+                    <span style="position: absolute; left: 0; color: #1677FF; font-size: 18px;">☐</span>
+                    砍价（长租/付半年/对比其他门面）
+                </li>
+            </ul>
+        </div>
+        
+        <hr>
+        <div class="ok-box">
+            <strong>🎯 最终建议：</strong><br>
+            1. 前期在家办公，不租门面（省至少5000元）<br>
+            2. 买车找懂车的人帮忙看（给200元辛苦费）<br>
+            3. 砍价至少2000-5000元（用本文档的砍价技巧）<br>
+            4. 确认总质量≤4.5吨（否则要办营运证）<br>
+            5. 过户完成前，不要付全款！
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    📘 临沂4.2米货车购车实战指南<br>
+    生成日期：2026年5月20日
+</div>
+
+<script>
+    function openToc() {
+        document.getElementById('tocOverlay').classList.add('active');
+        document.getElementById('tocPanel').classList.add('active');
+    }
+    function closeToc() {
+        document.getElementById('tocOverlay').classList.remove('active');
+        document.getElementById('tocPanel').classList.remove('active');
+    }
+    function toggleCollapse(el) {
+        el.classList.toggle('open');
+        var body = el.nextElementSibling;
+        body.classList.toggle('open');
+    }
+</script>
+</body>
+</html>
